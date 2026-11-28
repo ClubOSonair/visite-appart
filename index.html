@@ -1776,7 +1776,7 @@ addEventListener('keydown',e=>{if(e.code==='KeyQ'){HQ=!HQ;renderer.setPixelRatio
 
 {const _ss=setScene;setScene=function(n){_ss(n);pruneLights();};}
 setMode(false);pruneLights();requestAnimationFrame(frame);
-window.visite={version:'H30',nextScene,hinged,toggleHinge,setScene,setCurtains,toggleCurtain,curtains,useTarget,setColor,setStandRows,setCounter,colliders,setGal,go,setMode,toggleOverview,player,scene,camera,renderer,collide,spots:SPOTS,getState:()=>({overview,galOpen,galT,evening,standRows,counterOn})};
+window.visite={version:'H30b',nextScene,hinged,toggleHinge,setScene,setCurtains,toggleCurtain,curtains,useTarget,setColor,setStandRows,setCounter,colliders,setGal,go,setMode,toggleOverview,player,scene,camera,renderer,collide,spots:SPOTS,getState:()=>({overview,galOpen,galT,evening,standRows,counterOn})};
 // ================= H30 : VERSION TACTILE (iPad / téléphone) =================
 if(IS_T){
  // rendu allégé : résolution, ombres, lumières, miroirs
@@ -1786,13 +1786,13 @@ if(IS_T){
  // gestes iOS parasites (zoom, loupe, menu contextuel)
  for(const ev of ['gesturestart','gesturechange','dblclick'])document.addEventListener(ev,e=>e.preventDefault(),{passive:false});
  document.addEventListener('contextmenu',e=>e.preventDefault());
- // croix directionnelle (bas gauche) : ▲ avancer · ▼ reculer · ◀ ▶ tourner
+ // croix directionnelle (bas gauche) : ▲ avancer · ▼ reculer · ◀ ▶ pas de côté (la vue se gère au doigt)
  const pad=document.createElement('div');pad.id='pad';document.body.appendChild(pad);
  const mk=(cls,txt,code,lbl)=>{const b=document.createElement('button');b.className='pb '+cls;b.textContent=txt;b.setAttribute('aria-label',lbl);pad.appendChild(b);
   const on=e=>{e.preventDefault();e.stopPropagation();if(overview)return;keys[code]=true;b.classList.add('on');try{b.setPointerCapture(e.pointerId);}catch(_){}document.body.classList.add('exploring');};
   const off=e=>{delete keys[code];b.classList.remove('on');};
   b.addEventListener('pointerdown',on);for(const t of ['pointerup','pointercancel','lostpointercapture'])b.addEventListener(t,off);return b;};
- mk('up','▲','ArrowUp','Avancer');mk('left','◀','ArrowLeft','Tourner à gauche');mk('right','▶','ArrowRight','Tourner à droite');mk('down','▼','ArrowDown','Reculer');
+ mk('up','▲','ArrowUp','Avancer');mk('left','◀','KeyA','Aller à gauche');mk('right','▶','KeyD','Aller à droite');mk('down','▼','ArrowDown','Reculer');
  // actions (bas droite)
  const act=document.createElement('div');act.id='act';document.body.appendChild(act);
  const ab=(txt,fn,lbl)=>{const b=document.createElement('button');b.className='ab';b.innerHTML=txt;b.setAttribute('aria-label',lbl);b.addEventListener('pointerdown',e=>e.stopPropagation());b.addEventListener('click',e=>{e.stopPropagation();fn();});act.appendChild(b);return b;};
@@ -1801,7 +1801,7 @@ if(IS_T){
  ab('🗺<span>Plan</span>',()=>toggleOverview(),'Vue du dessus');
  setInterval(()=>bUse.classList.toggle('hot',!!hitObj),200);
  // aide au premier lancement
- const tip=document.createElement('div');tip.id='tip';tip.innerHTML='<div><b>Visite 3D</b><br>◀ ▲ ▶ ▼ : se déplacer et tourner<br>Glisser le doigt sur l’image : regarder<br>✋ : ouvrir une porte ou un rideau visé · 💡 : ambiance<br><span>Touchez pour commencer</span></div>';document.body.appendChild(tip);
+ const tip=document.createElement('div');tip.id='tip';tip.innerHTML='<div><b>Visite 3D</b><br>◀ ▲ ▶ ▼ : se déplacer (avant, arrière, côtés)<br>Glisser le doigt sur l’image : regarder / tourner<br>✋ : ouvrir une porte ou un rideau visé · 💡 : ambiance<br><span>Touchez pour commencer</span></div>';document.body.appendChild(tip);
  tip.addEventListener('click',()=>{tip.remove();document.body.classList.add('exploring');});
 }
 })();
